@@ -1,0 +1,92 @@
+{
+  "name": "casbin-mongoose-adapter",
+  "version": "2.1.0",
+  "description": "Mongoose adapter for Casbin",
+  "main": "src/adapter.js",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/node-casbin/mongoose-adapter",
+  "author": {
+    "name": "Node-Casbin"
+  },
+  "contributors": [
+    {
+      "name": "Eugene Obrezkov",
+      "email": "ghaiklor@gmail.com",
+      "url": "https://ghaiklor.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/node-casbin/mongoose-adapter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/node-casbin/mongoose-adapter/issues"
+  },
+  "keywords": [
+    "casbin",
+    "node-casbin",
+    "adapter",
+    "mongoose",
+    "access-control",
+    "authorization",
+    "auth",
+    "authz",
+    "acl",
+    "rbac",
+    "abac",
+    "orm"
+  ],
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "publishConfig": {
+    "tag": "latest",
+    "registry": "https://registry.npmjs.org"
+  },
+  "scripts": {
+    "docs": "jsdoc2md \"src/**/*.js\" > ./API.md",
+    "lint": "eslint .",
+    "prepublishOnly": "npm run lint && npm run test && npm run docs",
+    "test:integration": "nyc mocha -- --config test/integration/.mocharc.js",
+    "test:unit": "nyc mocha -- --config test/unit/.mocharc.js",
+    "coverage": "nyc mocha -- --config test/.mocharc.js"
+  },
+  "devDependencies": {
+    "casbin": "4.1.1",
+    "chai": "4.2.0",
+    "coveralls": "^3.0.9",
+    "cz-conventional-changelog": "3.0.2",
+    "eslint": "6.8.0",
+    "eslint-config-standard": "14.1.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-node": "11.0.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.1",
+    "husky": "4.2.3",
+    "jsdoc-to-markdown": "5.0.3",
+    "mocha": "7.0.1",
+    "nyc": "15.0.0",
+    "sinon": "^9.0.0"
+  },
+  "dependencies": {
+    "casbin": "4.1.1",
+    "mongoose": "5.9.1"
+  },
+  "peerDependencies": {
+    "casbin": "^4.1.1"
+  },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
+      "pre-commit": "npm run lint"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "nyc": {
+    "reporter": ["lcov"]
+  }
+}
