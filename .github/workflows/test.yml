@@ -1,17 +1,17 @@
-name: CI
+name: test
 on: [push]
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Begin CI...
+      - name: Prepare repo
         uses: actions/checkout@v2
 
-      - name: Use Node 12
+      - name: Use Node 14
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: 14.x
 
       - name: Use cached node_modules
         uses: actions/cache@v1
@@ -21,20 +21,14 @@ jobs:
           restore-keys: |
             nodeModules-
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-        env:
-          CI: true
+      - name: Test
+        uses: onichandame/node-test-action@master
 
       - name: Lint
         run: yarn lint
         env:
           CI: true
 
-      - name: Test
-        run: yarn test --ci --coverage --maxWorkers=2
-        env:
-          CI: true
 
       - name: Build
         run: yarn build

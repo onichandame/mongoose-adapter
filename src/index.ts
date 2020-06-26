@@ -99,6 +99,21 @@ export class MongooseAdapter implements FilteredAdapter {
       throw e
     }
   }
+  public async addPolicies(sec: string, ptype: string, rules: string[][]) {
+    try {
+      const p: Promise<any>[] = rules.map(rule =>
+        this.addPolicy(sec, ptype, rule)
+      )
+      await Promise.all(p)
+    } catch (e) {
+      this.logger(
+        `failed to add policies ${ptype}, ${JSON.stringify(
+          rules
+        )} due to ${JSON.stringify(e.message || e)}`
+      )
+      throw e
+    }
+  }
   public async removePolicy(_: string, ptype: string, rule: string[]) {
     try {
       const model = this.savePolicyLine(ptype, rule)
@@ -115,6 +130,9 @@ export class MongooseAdapter implements FilteredAdapter {
       )
       throw e
     }
+  }
+  public async removePolicies(sec: string, ptype: string, rules: string[][]) {
+    return Promise.all(rules.map(rule => this.removePolicy(sec, ptype, rule)))
   }
   public async removeFilteredPolicy(
     _: string,
@@ -143,5 +161,9 @@ export class MongooseAdapter implements FilteredAdapter {
       )
       throw e
     }
+  }
+  public async clearPolicy() {
+    this.logger(`deleting all policies!`)
+    return this.RuleModel.deleteMany({})
   }
 }

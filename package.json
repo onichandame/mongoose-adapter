@@ -4,8 +4,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "engines": {
     "node": ">=10"
@@ -20,7 +19,10 @@
   },
   "peerDependencies": {},
   "husky": {
-    "hooks": {}
+    "hooks": {
+      "commit": "yarn lint",
+      "push":"yarn test && yarn build"
+    }
   },
   "name": "@onichandame/mongoose-adapter",
   "author": "onichandame",

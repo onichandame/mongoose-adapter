@@ -86,6 +86,46 @@ describe("Mongoose adapter", () => {
       ["data2_admin", "data2", "write"],
       ["role", "res", "action"]
     ])
+    await adapter.addPolicies("", "p", [
+      ["role", "res", "GET"],
+      ["role", "res", "POST"]
+    ])
+    enforcer.clearPolicy()
+    expect(await enforcer.getPolicy()).toHaveLength(0)
+    await enforcer.loadPolicy()
+    expect(await enforcer.getPolicy()).toEqual([
+      ["alice", "data1", "read"],
+      ["bob", "data2", "write"],
+      ["data2_admin", "data2", "read"],
+      ["data2_admin", "data2", "write"],
+      ["role", "res", "action"],
+      ["role", "res", "GET"],
+      ["role", "res", "POST"]
+    ])
+    await adapter.removePolicy("", "p", ["role", "res", "action"])
+    await enforcer.loadPolicy()
+    expect(await enforcer.getPolicy()).toEqual([
+      ["alice", "data1", "read"],
+      ["bob", "data2", "write"],
+      ["data2_admin", "data2", "read"],
+      ["data2_admin", "data2", "write"],
+      ["role", "res", "GET"],
+      ["role", "res", "POST"]
+    ])
+    await adapter.removePolicies("", "p", [
+      ["role", "res", "GET"],
+      ["role", "res", "POST"]
+    ])
+    await enforcer.loadPolicy()
+    expect(await enforcer.getPolicy()).toEqual([
+      ["alice", "data1", "read"],
+      ["bob", "data2", "write"],
+      ["data2_admin", "data2", "read"],
+      ["data2_admin", "data2", "write"]
+    ])
+    await adapter.clearPolicy()
+    await enforcer.loadPolicy()
+    expect(await enforcer.getPolicy()).toHaveLength(0)
     done()
   })
   afterAll(async () => {
